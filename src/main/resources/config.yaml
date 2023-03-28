@@ -1,0 +1,34 @@
+plaid:
+  client_id: "62b2c28d5063bf00153693a0"
+  secret: "0b9acdbc17a3aa5304237b3efbda00"
+  secret1: "b6904facdc9ab3a6e0977743cf1b8a"
+  access_token: "access-sandbox-2499749b-ed2c-403d-841d-bbbb16804600"
+  access_token1: "access-sandbox-e7e755aa-1be4-4820-b48b-2ec4f9cedac3"
+
+  request:
+    host: "sandbox.plaid.com"
+    identity: "/identity/get"
+    transactions: "/transactions/get"
+    institutions: "/institutions/get_by_id"
+
+sysApi:   
+  pdfGen:
+    host: "pdf-generator-api.sg-s1.cloudhub.io"
+    genPDF: "/generate-pdf/{templateID}"
+    
+  awsS3:
+    host: "storage-process-api.sg-s1.cloudhub.io"
+    savePDF: "/Documentsupload"
+    
+  salesforce:
+    host: "salesforce-lending-api.sg-s1.cloudhub.io"
+    uploadDoc: "/lending/documents"
+    loanReq: "/lending/loanapplicant"
+    
+mongodb:
+  connectionString: "mongodb+srv://prakashsr:rqEICMCTPE5y0P4M@fiscluster.ulxri.mongodb.net/LendingAcc?retryWrites=true&w=majority"
+  profilesCol: "Plaid-Profiles"
+  
+nous:
+  commsAccelerator: "nous-comms-accelerator.sg-s1.cloudhub.io"
+  commsEmail: "/comms/notify/email"

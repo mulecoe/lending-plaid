@@ -1,0 +1,7 @@
+%dw 2.0
+
+type auto_02de066e_9672_468d_8d81_a39b3817c388_Output_Variables_sfdcLoan = {|
+  contact_id: String, 
+  loan_id: String
+|}
+

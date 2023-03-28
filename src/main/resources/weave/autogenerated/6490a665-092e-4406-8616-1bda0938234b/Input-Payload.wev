@@ -1,0 +1,11 @@
+%dw 2.0
+
+type auto_6490a665_092e_4406_8616_1bda0938234b_Input_Payload = {|
+  client_id: String, 
+  secret: String, 
+  access_token: String, 
+  start_date: String, 
+  end_date: String, 
+  options: {| account_ids: Array<String> |}
+|}
+

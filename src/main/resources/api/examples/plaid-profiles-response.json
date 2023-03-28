@@ -1,0 +1,15 @@
+[
+  {
+    "account_id": "B7rv7qLWQysqQ6VJeQxNsZxVle9g6EFLwzqle",
+    "balances": {
+      "available": 100,
+      "current": 110
+    },
+    "name": "Alberta Bobbeth Charleson",
+    "email": "accountholder0@example.com",
+    "mobile": "1112223333",
+    "Billing_Address": "Malakoff, US, 14236, NY, 2992 Cameron Road",
+    "Statement_Date": "21-09-2022",
+    "Period_Covered": "2022-09-21 to 2022-07-21"
+  }
+]

@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_c5d0fa15_3aa4_42a0_8cf7_b9b9213263ed_Input_Payload = {| contact_id: String |}
+

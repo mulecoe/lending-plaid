@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <flow name="plaid-account-statements-main">
+        <http:listener config-ref="plaid-account-statements-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="plaid-account-statements-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="plaid-account-statements-console">
+        <http:listener config-ref="plaid-account-statements-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="plaid-account-statements-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="post:\account-statements:application\json:plaid-account-statements-config">
+        <flow-ref doc:name="get plaid account statements" doc:id="1d65a928-3991-4e49-96e1-fa98ee64e31a" name="get-plaidAccountStatements-implementationFlow" />
+    </flow>
+    <flow name="post:\generate-pdf\(templateID):application\json:plaid-account-statements-config">
+        <set-variable value="#[attributes.uriParams.'templateID']" doc:name="tempateId" doc:id="95556010-c1af-483f-94da-a355e0712cc8" variableName="tempateId" />
+        <flow-ref doc:name="generate pdf impl flow" doc:id="7f3766e6-0ca4-422e-b147-f8e11b256c75" name="pdfGenerateForAccountID-implementationFlow" />
+        <set-payload value="#[payload]" doc:name="account statement in pdf format" doc:id="2a027fd6-c25d-43c2-a86a-9f652d8bf2fb" mimeType="application/pdf" />
+    </flow>
+    <flow name="post:\plaid-account\(contact_id):plaid-account-statements-config">
+        <ee:transform doc:id="f5527937-f340-4951-807b-6ea076ef2baa" doc:name="contact-id">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"contact_id" : attributes.uriParams.'contact_id'
+}]]></ee:set-payload>
+            </ee:message>
+            <ee:variables />
+        </ee:transform>
+        <flow-ref doc:name="get plaid credentials by contact-id" doc:id="b6db93f2-248b-4c7c-8344-f8c887fdd554" name="get-plaidProfilesByContactId-implementationFlow" />
+        <ee:transform doc:name="plaid profiles" doc:id="96e93bc5-1f17-4c2c-a816-d365c63afbf7">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="get plaid profiles impl flow" doc:id="7ed8bac7-c26a-49ae-bcb8-19041970f896" name="get-plaidProfiles-implementationFlow" />
+    </flow>
+    <flow name="post:\plaid-account:application\json:plaid-account-statements-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="plaid credentials">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": payload.client_id,
+  "secret": payload.secret,
+  "access_token" : if(payload.secret ~= "0b9acdbc17a3aa5304237b3efbda00") p('plaid.access_token') else p('plaid.access_token1')
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <flow-ref doc:name="get plaid profiles" doc:id="4945a2f3-9146-4206-aaca-f69f9205be72" name="get-plaidProfiles-implementationFlow" />
+    </flow>
+    <flow name="post:\plaid-transactions:application\json:plaid-account-statements-config">
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="plaid credentials with account-id">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"client_id": p('plaid.client_id'),
+	"secret": p('plaid.secret'),
+	"access_token": p('plaid.access_token'),
+	"start_date": now() as Date - |P3M|,
+	"end_date": now() as Date,
+	"options": {
+		"account_ids": [payload.'account-id']
+	}
+}]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="plaidTrans"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"client_id": p('plaid.client_id'),
+	"secret": p('plaid.secret'),
+	"access_token": p('plaid.access_token'),
+	"start_date": now() as Date - |P3M|,
+	"end_date": now() as Date,
+	"options": {
+		"account_ids": [payload.'account-id']
+	}
+}]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <try doc:name="Try" doc:id="40a605ab-a375-40c0-a4ed-6a3fb23b002e">
+            <flow-ref doc:name="get plaid transactions" doc:id="ca94740c-a8eb-4be4-9df2-f8d1f1500729" name="get-plaidTransactions-implementationFlow" />
+            <error-handler>
+                <on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="07f7713f-df36-45f4-9f63-ce464db6c02d">
+                    <ee:transform doc:name="Transform Message" doc:id="b13d724a-15ae-4b21-8894-1d1313387355">
+                        <ee:message>
+                            <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"client_id": p('plaid.client_id'),
+	"secret": p('plaid.secret1'),
+	"access_token": p('plaid.access_token1'),
+	"start_date": now() as Date - |P3M|,
+	"end_date": now() as Date,
+	"options": {
+		"account_ids": vars.plaidTrans.options.account_ids
+	}
+}]]></ee:set-payload>
+                        </ee:message>
+                    </ee:transform>
+                    <flow-ref doc:name="get plaid transactions" doc:id="da31b01d-a137-4c21-8b2b-0acbfdbc9316" name="get-plaidTransactions-implementationFlow" />
+                </on-error-continue>
+            </error-handler>
+        </try>
+    </flow>
+    <flow name="post:\save_pdf\(templateID):application\json:plaid-account-statements-config">
+        <set-variable value="#[attributes.uriParams.'templateID']" doc:name="tempateId" doc:id="bd15162b-a4dd-4048-8f40-3ae8fd775361" variableName="tempateId" />
+        <flow-ref doc:name="generate pdf" doc:id="829b870e-59fa-4ace-91e4-3cf317d9b254" name="pdfGenerateForAccountID-implementationFlow" />
+        <ee:transform doc:name="get multipart  data" doc:id="0653fec2-0b38-4614-80f7-11c1d6e430a7">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload.parts..content]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <ee:transform doc:name="prepare multipart input for aws-s3" doc:id="8dcb2c70-94e7-4d25-af86-23b01570d1ed">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+output multipart/form-data
+---
+{
+    "parts": {
+        "files": {
+            "headers": {
+                "Content-Disposition": {
+                    "name": "files",
+                    "filename": "Account Statement.pdf",
+                    "subtype": "form-data"
+                },
+                "Content-Type": "application/pdf"
+            },
+            "content": (payload[0])
+                          }
+    }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <http:request method="POST" doc:name="Upload To S3" doc:id="e17ad836-c26b-4dd4-b99f-09740dc87948" config-ref="uploadToAwsS3_Request" path="/Documentsupload?id=NST21891" />
+        <ee:transform doc:name="aws-s3 response" doc:id="2d98e327-da11-4eee-b44e-b34792fa58f6">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "message": "Document has been uploaded successfully"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger level="INFO" doc:name="Logger" doc:id="d3370d75-bce1-4ff7-95ec-edb7793a70d4" message="#[payload]" />
+    </flow>
+    <flow name="post:\upload-document:application\json:plaid-account-statements-config">
+        <flow-ref doc:name="upload accstmt to SF" doc:id="15dba249-97ff-4fb4-a143-64f211e3fedc" name="upload-plaidAccountStatementToSalesforce-implementation-flow" />
+        <logger level="INFO" doc:name="Logger" doc:id="bb08dd4c-4995-462b-baac-967899c27fe7" message="#[payload]" />
+    </flow>
+    <flow name="post:\send\account-statement\(template-id):application\json:plaid-account-statements-config">
+        <ee:transform doc:name="email id and Template id variable" doc:id="51312f6e-b2c3-410a-9387-8def84c87cf7">
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="userData"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"email" : attributes.queryParams.email,
+	"template-id" : attributes.uriParams.'template-id'
+}]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<parse-template doc:name="Email Body" doc:id="c3740a69-28ca-4acb-8246-760f1fc8c4d6" location="webapp\account-statement-email-template (1).html" target="html-form" targetValue="#[payload]" />
+		<http:request method="POST" doc:name="Genarate PDF document" doc:id="c573ebe1-b561-47af-b87f-792d6b191ff6" config-ref="PDF-Generation-request" path="${sysApi.pdfGen.genPDF}">
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"templateID" : vars.userData."template-id"
+}]]]></http:uri-params>
+		</http:request>
+		<ee:transform doc:name="prepare comms accelerator" doc:id="55ea456e-14ec-4f2c-8b7e-33d0b5455ac0">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+output multipart/form-data
+---
+{
+	"parts": {
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "realtime",
+					"subtype": "form-data"
+				},
+				"Content-Type": "text/plain"
+			},
+			"content": "Yes"
+		},
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "subject-line",
+					"subtype": "form-data"
+				},
+				"Content-Type": "text/plain"
+			},
+			"content": "Account Statement"
+		},
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "channel",
+					"subtype": "form-data"
+				},
+				"Content-Type": "text/plain"
+			},
+			"content": "EMAIL"
+		},
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "email-id",
+					"subtype": "form-data"
+				},
+				"Content-Type": "text/plain"
+			},
+			"content": vars.userData.email
+		},
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "files",
+					"filename": "Account Statement.pdf",
+					"subtype": "form-data"
+				},
+				"Content-Type": "application/pdf"
+			},
+			"content": fromBase64(payload.response)
+		},
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "files",
+					"filename": "body.html",
+					"subtype": "form-data"
+				},
+				"Content-Type": "text/html"
+			},
+			"content": vars.'html-form'
+		}
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<http:request method="POST" doc:name="send email" doc:id="4d61b130-5432-40ca-8c93-bda0d761b086" config-ref="comms_accelerator_request" path="${nous.commsEmail}"/>
+		<ee:transform doc:name="Transform Message" doc:id="061ba227-6659-4e57-acfe-bc6fc4b53684">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message : "account statement submitted successfully"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="a9a0578e-d5f4-4672-a1f4-2dff9da1979d" message="#[payload]" />
+    </flow>
+</mule>

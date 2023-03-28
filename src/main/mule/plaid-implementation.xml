@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd">
+	<flow name="get-plaidProfiles-implementationFlow" doc:id="7a007a4b-4629-48fc-9766-949472014f72" >
+		<ee:transform doc:name="Plaid Client Credentials" doc:id="946eb645-3638-4a40-8358-1124e5b77127" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="Plaid-Identity" doc:id="f0e0a5d7-88ef-4c76-8d18-8820ab169b2e" config-ref="plaid-request-api" path="${plaid.request.identity}" responseTimeout="900000">
+		</http:request>
+		<ee:transform doc:name="aggregated plaid profiles" doc:id="bb7f5ee6-0def-409c-bd55-af9949772539" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.accounts map({
+    "account_id" : $.account_id,
+    "balances" : {
+        "available" : $.balances.available,
+        "current" : $.balances.current
+    },	
+    "account_name" : $.name,
+    "name" : ($.owners.names[0])[0],
+    "email" : ($.owners.emails[0].data)[0] default "",
+    "emails" : $.owners..emails..data,
+    "mobile" : $.owners..phone_numbers..data[0],
+    "Phone_Numbers" : $.owners..phone_numbers..data,
+    "Billing_Address" : ($.owners.addresses[0].data[0]) pluck ($) joinBy  ", " ,
+    "Addresses" : ($.owners..addresses..data[1]) pluck($) joinBy  ", ",
+    "Statement_Date" : now() as String {format: "MMM-dd-yyyy"},
+    "Period_Covered" : ((now() - |P3M|) as String {format: "MMM-dd-yyyy"}) ++ " to " ++ (now() as String {format: "MMM-dd-yyyy"}),
+    "instituion_id" : payload.'item'.institution_id
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="plaid identity" doc:id="33301589-d713-45f7-a49a-aa1b9cd8074f" message='#["plaid identity" : payload]'/>
+	</flow>
+	<flow name="get-plaidTransactions-implementationFlow" doc:id="6490a665-092e-4406-8616-1bda0938234b" >
+		<ee:transform doc:name="plaid credentials" doc:id="ed5c651d-37f8-4f7d-8d14-322fb90df5e9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="plaid Transactions API call" doc:id="cd305d2a-ed65-4f55-bff7-fc69451255b9" config-ref="plaid-request-api" path="${plaid.request.transactions}" responseTimeout="900000" outputMimeType="application/json"/>
+		<ee:transform doc:name="plaid Transactions" doc:id="57817779-b34f-421a-a8b2-6b664b33f2a2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="plaid transactions" doc:id="5b135f66-2427-4b88-b2c7-fcf08db300c5" message='#["plaid Transaction " : payload]'/>
+	</flow>
+	<flow name="get-plaidAccountStatements-implementationFlow" doc:id="3cfe7c5a-7af1-45b9-a88d-c88d0cb17d49" >
+		<ee:transform doc:name="plaid credentils" doc:id="f77b9835-cc09-4489-84ad-a626b6702b54" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": p('plaid.client_id'),
+  "secret": p('plaid.secret'),
+  "access_token" : p('plaid.access_token'),
+  "options" : {
+      "account_ids" : [payload.'account-id']
+  }
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="inputData" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": p('plaid.client_id'),
+  "secret": p('plaid.secret'),
+  "access_token" : p('plaid.access_token'),
+  "options" : {
+      "account_ids" : [payload.'account-id']
+  }
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try doc:name="Try" doc:id="99fa270e-7814-42b2-a284-c84d0852d2be" >
+			<flow-ref doc:name="get Plaid Profiles" doc:id="ec85d76d-6491-4af2-be87-9e73af88179e" name="get-plaidProfiles-implementationFlow" target="plaidIdentity" />
+			<ee:transform doc:name="plaid credentials for account transactions" doc:id="d6816202-28d1-41db-bfe2-d8ff8547e345">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": vars.inputData.client_id,
+  "secret": vars.inputData.secret,
+  "access_token": vars.inputData.access_token,
+  "start_date": now() as Date - |P3M|,
+  "end_date": now() as Date,
+  "options" : {
+      "account_ids" : vars.plaidIdentity..account_id
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="eca2dff4-7ca4-4955-8957-bada1b7ea181" >
+					<ee:transform doc:name="plaid credentials" doc:id="3125014f-b4b8-49e9-8962-f8658decfce3" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": p('plaid.client_id'),
+  "secret": p('plaid.secret1'),
+  "access_token" : p('plaid.access_token1'),
+  "options" : {
+      "account_ids" : vars.inputData.options.account_ids
+  }
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+					<flow-ref doc:name="get Plaid Profiles" doc:id="e1016239-6604-4de7-a923-09e7e84a321f" name="get-plaidProfiles-implementationFlow" target="plaidIdentity" />
+					<ee:transform doc:name="Transform Message" doc:id="2dc9e399-2829-4692-b392-4c5d4f32d71f" >
+						<ee:message >
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": p('plaid.client_id'),
+  "secret": p('plaid.secret1'),
+  "access_token" : p('plaid.access_token1'),
+  "start_date": now() as Date - |P3M|,
+  "end_date": now() as Date,
+  "options" : {
+      "account_ids" : vars.inputData.options.account_ids
+  }
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<flow-ref doc:name="get plaid-transactions" doc:id="44394152-67e6-43f5-a429-e2d2b9cb726c" name="get-plaidTransactions-implementationFlow"/>
+		<choice doc:name="Choice" doc:id="9b89c960-f93b-43b7-a7af-c575a6e9856b" >
+			<when expression="#[isEmpty(payload.transactions)]">
+				<ee:transform doc:name="plaid transactions" doc:id="cb2f8e0a-6bbc-41df-8024-94770972a7f5" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload.transactions]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="plaid account statement response" doc:id="e5397dc7-7673-456b-8cf9-96276f20f257">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.plaidIdentity map ((item, index) -> {
+"AccountId" : item.account_id,
+"Mobile" : item.mobile,
+"Phone_numbers" : item.Phone_Numbers,
+"balance" : item.balances,
+"name" : item.name,
+"account_name" : item.account_name,
+"email" : item.email,
+"emails" : item.emails,
+"billing_address" : item."Billing_Address",
+"addresses" : item.Addresses,
+"Period_Covered" : item.'Period_Covered',
+"statement_date" : item.'Statement_Date',
+"instituion_id" : item.instituion_id,
+"institute_name" : "Chase",
+"transactions":(payload.transactions filter ($.account_id ~= item.account_id )) map({
+    "Date" : $.date,
+    "merchant_name" : $.merchant_name,
+    "payment_channel" : $.payment_channel,
+    "pending" : $.pending,
+    "pending_transaction_id" : $.pending_transaction_id default "",
+    "transaction_id" : $.transaction_id,
+    "transaction_type" : $.transaction_type,
+    (if($.amount contains("-")) {"debit" : $.amount, "credit" : ""}  else{"credit" : $.amount, "debit" : ""} )
+})
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="plaid account statement" doc:id="798db0eb-da64-45d1-8af6-8beb9c777f89" message='#["plaid account statement " : payload]'/>
+	</flow>
+	<flow name="get-plaidProfilesByContactId-implementationFlow" doc:id="04149bde-81e0-47e9-88a6-2b2e11cec180" >
+		<logger level="INFO" doc:name="Logger" doc:id="d5a3dfc0-72fa-482e-98d4-ef562e5c9f23" message='#["fetching plaid credentials from mongoDB " : payload]'/>
+		<mongo:find-documents collectionName="UserCredentials" fields="," doc:name="get UserCreds" doc:id="832f1f92-89a2-4ce4-857a-50208a227c3b" config-ref="MongoDB_Config">
+			<mongo:query ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+	"contact_id" : payload.contact_id
+}]]]></mongo:query>
+		</mongo:find-documents>
+		<choice doc:name="check if plaid creds are attached with contact-id" doc:id="09d9459b-8180-4bd6-bb55-cf3ef7fd920e" >
+			<when expression="#[(sizeOf(payload) &gt; 0)]">
+				<ee:transform doc:name="process the records" doc:id="b505f30a-3389-4727-90d8-77b832313587" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+(payload map($ - "_id"))[0]]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<ee:transform doc:name="plaid credentials" doc:id="a81a77df-d3cf-4521-adf2-7c283ca01cef" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+if(payload.secret ~= "b6904facdc9ab3a6e0977743cf1b8a"){
+	"client_id": payload.client_id,
+    "secret": payload.secret,
+    "access_token": Mule::p('plaid.access_token1')
+} else {
+	"client_id": payload.client_id,
+    "secret": payload.secret,
+    "access_token": Mule::p('plaid.access_token')
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Data not response" doc:id="e74b8595-5089-48dd-8db1-5658bd21edaa" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "not found"
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="plaid credentials" doc:id="472e1487-359c-4129-95f8-b4a3788d2370" message='#["plaid credentials from mongoDB" : payload]'/>
+	</flow>
+	<flow name="pdfGenerateForAccountID-implementationFlow" doc:id="0531ed45-f7f9-43e7-ac3f-639e4bdab444" >
+        <flow-ref doc:name="get account statement" doc:id="e64f9180-3cb1-451e-bd63-d474f609a8ad" name="get-plaidAccountStatements-implementationFlow"/>
+		<http:request method="POST" doc:name="PDFGenerate-Request" doc:id="13081e70-adb9-46f9-ad21-4dc19315c45c" config-ref="PDF-Generation-request" path="/generate-pdf/{templateId}">
+			<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"templateId" : vars.tempateId
+}]]]></http:uri-params>
+		</http:request>
+		<ee:transform doc:name="convert pdf response to multipart data" doc:id="a04d3419-e41c-48ac-b4c9-71b85c25ef4b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Binaries
+output multipart/form-data
+---
+{
+	"parts": {
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "files",
+					"filename": "Account Statement.pdf",
+					"subtype": "form-data"
+				},
+				"Content-Type": "application/pdf"
+			},
+			"content": fromBase64(payload.response)
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e4b7ba4c-7449-4146-87df-1d18c5962dfe" message='#["generated pdf account statement"]'/>
+	</flow>
+	<flow name="upload-plaidAccountStatementToSalesforce-implementation-flow" doc:id="02de066e-9672-468d-8d81-a39b3817c388" >
+		<ee:transform doc:name="contact-id" doc:id="e94cefa1-84d4-4ab7-97dd-e2cf79dc6ca2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"contact_id" : payload.'contact_id'
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="sfdcLoan" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"contact_id" : payload.contact_id,
+	"loan_id" : payload.loan_id
+}]]></ee:set-variable>
+				<ee:set-variable variableName="tempateId" ><![CDATA[472199]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="9e52a000-5fba-43f2-abfd-51c77651deda" message='#["SF loan Applicant " : vars.sfdcLoan]'/>
+		<flow-ref doc:name="get salesforce aggregator response" doc:id="6e3d029e-59cc-488d-8b10-f1e3ff9aeaaf" name="salesforce-aggregator-implFLow" target="sfLoanApplicantName"/>
+		<flow-ref doc:name="get plaid credentials from MongoDB" doc:id="d1a9d2f5-6a75-4331-a94f-0b6f3b3dc088" name="get-plaidProfilesByContactId-implementationFlow"/>
+		<flow-ref doc:name="get plaid profiles" doc:id="81865da6-b851-4c8c-9a38-598978633299" name="get-plaidProfiles-implementationFlow" target="plaidIdentity"/>
+		<ee:transform doc:name="preare input for plaid transactions" doc:id="72b74a69-628e-48d8-9681-8046e7465df4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "client_id": "62b2c28d5063bf00153693a0",
+  "secret": "0b9acdbc17a3aa5304237b3efbda00",
+  "access_token" : p('plaid.access_token'),
+  "start_date": now() as Date - |P3M|,
+  "end_date": now() as Date,
+  "options" : {
+      "account_ids" : vars.plaidIdentity..account_id
+  }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="get plaid transactions" doc:id="5bbd5e86-66d9-4eca-90e7-67d41e3c4a80" name="get-plaidTransactions-implementationFlow"/>
+		<ee:transform doc:name="plaid account statements" doc:id="024f0b10-4263-495a-a284-270d800507ba" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+---
+vars.plaidIdentity map ((item, index) -> {
+	"AccountId": item.account_id,
+	"Mobile": vars.sfLoanApplicantName.mobile,
+	"Phone_numbers": item.Phone_Numbers,
+	"balance": item.balances,
+	"name": vars.sfLoanApplicantName.name,
+	"account_name": item.account_name,
+	"email": vars.sfLoanApplicantName.email,
+	"emails": item.emails,
+	"billing_address": item."Billing_Address",
+	"addresses": item.Addresses,
+	"Period_Covered": item.'Period_Covered',
+	"statement_date": item.'Statement_Date',
+	"instituion_id": item.instituion_id,
+	"institute_name": "Chase",
+	"transactions": (payload.transactions filter ($.account_id ~= item.account_id )) map({
+		"Date": $.date,
+		"merchant_name": $.merchant_name,
+		"payment_channel": $.payment_channel,
+		"pending": $.pending,
+		"pending_transaction_id": $.pending_transaction_id default "",
+		"transaction_id": $.transaction_id,
+		"transaction_type": $.transaction_type,
+		(if ( $.amount contains("-") ) {
+			"credit" : ($.amount substringAfter "-") as Number,
+        	"debit" : ""
+		}  else{
+			"credit": "",
+			"debit": $.amount
+		})
+	})
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="plaid account statements with highest no. of transactions" doc:id="46a86ce8-0184-48aa-bb40-01328f0bd57d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+(payload orderBy(sizeOf($.transactions)))[-1 to -3]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="POST" doc:name="PDFGenerate-Request" doc:id="2672aff8-d53c-4003-8224-8e9a4bbe437a" config-ref="PDF-Generation-request" path="/generate-pdf/{templateId}">
+						<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"templateId" : vars.tempateId
+}]]]></http:uri-params>
+					</http:request>
+		<ee:transform doc:name="convert pdf response to multipart data" doc:id="23945f27-fda7-47a6-8058-24dceeabd1b3">
+						<ee:message>
+							<ee:set-payload><![CDATA[%dw 2.0
+import * from dw::core::Strings
+import * from dw::core::Binaries
+output multipart/form-data
+---
+{
+	"parts": {
+		"files": {
+			"headers": {
+				"Content-Disposition": {
+					"name": "files",
+					"filename": "plaid_account_statement.pdf",
+					"subtype": "form-data"
+				},
+				"Content-Type": "application/pdf"
+			},
+			"content": fromBase64(payload.response)
+		}
+	}
+}]]></ee:set-payload>
+						</ee:message>
+					</ee:transform>
+		<http:request method="POST" doc:name="upload documents to SF" doc:id="253980e2-124b-4eb1-aecc-e7e41066e684" path="${sysApi.salesforce.uploadDoc}" config-ref="salesforce-sysAPI-request">
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"id" : vars.sfdcLoan.loan_id
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="output response" doc:id="813da13a-f52e-4811-997b-97bdb94fe1e1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "message": "Document has been uploaded successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	
+</flow>
+	<flow name="salesforce-aggregator-implFLow" doc:id="c5d0fa15-3aa4-42a0-8cf7-b9b9213263ed" >
+		<ee:transform doc:name="Transform Message" doc:id="b57a8d46-0cae-4f4d-a9b5-25c4ec33736e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"id" : vars.sfdcLoan.loan_id
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<http:request method="GET" doc:name="SF aggregator API call" doc:id="1e14b179-3140-47ce-a61f-4fff360dcfb3" config-ref="salesforce_aggregator" path="${sysApi.salesforce.loanReq}">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"id" : payload.id
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="c4cc52d4-a300-4d93-8f41-831897605b93" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+//payload.LoanApplication.Name[0]
+
+//{
+//    "name" : payload.LoanApplication..Name[0],
+//    "mobile" : payload.Contact..Phone[0],
+//    "email" : payload.Contact..Email[0]
+//}
+
+{
+    "name" : payload.Account.Name[0],
+    "mobile" : payload.Contact.Phone[0],
+    "email" : payload.Contact.Email[0]
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="092b94db-227e-4756-b747-b1531879d43b" message='#["SF Loan applicant details" : payload]' />
+	</flow>
+</mule>

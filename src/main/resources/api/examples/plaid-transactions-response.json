@@ -1,0 +1,26 @@
+{
+  "transactions": [
+    {
+      "Date": "2022-09-15",
+      "merchant_name": "Uber",
+      "payment_channel": "in store",
+      "pending": false,
+      "pending_transaction_id": "",
+      "transaction_id": "MkERk1gVAdfBj4boljMmCG3pk8okyBI7empR8",
+      "transaction_type": "special",
+      "credit": 6.33,
+      "debit": ""
+    },
+    {
+      "Date": "2022-09-02",
+      "merchant_name": "Uber",
+      "payment_channel": "in store",
+      "pending": false,
+      "pending_transaction_id": "",
+      "transaction_id": "1nPLne6BG7s8PM4mZPJ9tZ4WMgnMAqfmZDXPl",
+      "transaction_type": "special",
+      "credit": 5.4,
+      "debit": ""
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+#%RAML 1.0
+title: plaid accelerator
+version: v1
+protocols: [HTTP,HTTPS]
+uses:
+  lib : /library/library.raml
+
+/account-statements:
+  description: Retrieve account statements
+  post:
+    body:
+      application/json:
+        type: lib.account-statement
+        example: !include /examples/accountId-example.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include /examples/account-statement-response.json
+
+/plaid-account:
+  post:
+    body:
+      application/json:
+        type: lib.client-credentials
+        example: !include examples/client-credentials-example.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include /examples/plaid-profiles-response.json
+
+/plaid-account/{contact_id}:
+  post:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include /examples/plaid-profiles-response.json
+
+/plaid-transactions:
+  post:
+    body:
+      application/json:
+        type: lib.account-id
+        example: !include examples/accountId-example.json
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include /examples/plaid-transactions-response.json
+
+/generate-pdf/{templateID}:
+  post:
+    body:
+      application/json:
+        type: lib.account-id
+        example: !include /examples/accountId-example.json
+
+/save_pdf/{templateID}:
+  post:
+    body:
+      application/json:
+        type: lib.account-id
+        example: !include /examples/accountId-example.json     
+
+/upload-document:
+  post:
+    body:
+      application/json:
+        type: lib.sfdc-upload
+        example: !include examples/sfdc-upload-input-example.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include examples/sfdc-upload-response-example.json   
+
+/send/account-statement/{template-id}:
+  post:
+    queryParameters:
+      email:
+        description: email-id to sent account statement
+        required: true
+    body:
+      application/json:
+        description: account statement in Json data

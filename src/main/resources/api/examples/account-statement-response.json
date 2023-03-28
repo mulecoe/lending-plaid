@@ -1,0 +1,37 @@
+{
+  "AccountId": "m7aNrpblkLuErEDXvd86HNZwRBMWW8fA1XAqZ",
+  "Mobile": "1112223333",
+  "balance": {
+    "available": 200,
+    "current": 210
+  },
+  "name": "Alberta Bobbeth Charleson",
+  "email": "accountholder0@example.com",
+  "billing_address": "Malakoff, US, 14236, NY, 2992 Cameron Road",
+  "Period_Covered": "2022-09-16 to 2022-07-16",
+  "statement_date": "16-09-2022",
+  "transactions": [
+    {
+      "Date": "2021-01-10",
+      "merchant_name": null,
+      "payment_channel": "other",
+      "pending": false,
+      "pending_transaction_id": "",
+      "transaction_id": "WVpZKEz158ik1kEvXRN6S399r6rrRGIvzyJAp",
+      "transaction_type": "special",
+      "credit": 25,
+      "debit": ""
+    },
+    {
+      "Date": "2021-01-05",
+      "merchant_name": null,
+      "payment_channel": "other",
+      "pending": false,
+      "pending_transaction_id": "",
+      "transaction_id": "A64gqrpDRQfKzKn4l69As7nnGqGGMWFyNJnKZ",
+      "transaction_type": "special",
+      "debit": -4.22,
+      "credit": ""
+    }
+  ]
+}
