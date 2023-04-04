@@ -288,7 +288,7 @@ output application/json
 }]]></ee:set-variable>
             </ee:variables>
         </ee:transform>
-		<parse-template doc:name="Email Body" doc:id="c3740a69-28ca-4acb-8246-760f1fc8c4d6" location="webapp\account-statement-email-template (1).html" target="html-form" targetValue="#[payload]" />
+		<parse-template doc:name="Email Body" doc:id="c3740a69-28ca-4acb-8246-760f1fc8c4d6" location="account-statement-email-template (1).html" target="html-form" targetValue="#[payload]" />
 		<http:request method="POST" doc:name="Genarate PDF document" doc:id="c573ebe1-b561-47af-b87f-792d6b191ff6" config-ref="PDF-Generation-request" path="${sysApi.pdfGen.genPDF}">
 			<http:uri-params ><![CDATA[#[output application/java
 ---
