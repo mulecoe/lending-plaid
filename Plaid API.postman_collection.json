@@ -1,0 +1,330 @@
+{
+	"info": {
+		"_postman_id": "0dfc8f2f-2f82-4088-bd90-5ce62dbe4629",
+		"name": "Plaid API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20809423"
+	},
+	"item": [
+		{
+			"name": "Plaid Acc by Contact",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/plaid-account/0035j00000JF6bQAAT",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"plaid-account",
+						"0035j00000JF6bQAAT"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pdf-Generate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"account-id\" : \"WnyBQlnVDmh5zlQ11Vpvuqd48VjGNDHP5joDn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/generate-pdf/472199",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"generate-pdf",
+						"472199"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "awss3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"account-id\" : \"B7rv7qLWQysqQ6VJeQxNsZxVle9g6EFLwzqle\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/save_pdf/472199",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"save_pdf",
+						"472199"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Transations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"account-id\" : \"WnyBQlnVDmh5zlQ11Vpvuqd48VjGNDHP5joDn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/plaid-transactions",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"plaid-transactions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profiles",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"client_id\": \"62b2c28d5063bf00153693a0\",\r\n  \"secret\": \"0b9acdbc17a3aa5304237b3efbda00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/plaid-account",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"plaid-account"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acc Statements",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"account-id\" : \"WnyBQlnVDmh5zlQ11Vpvuqd48VjGNDHP5joDn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/account-statements",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"account-statements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SFDC file docs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"contact_id\" : \"0035j00000JF4ZMAA1\",\r\n  \"loan_id\" : \"a185g000000RadUAAS\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/upload-document",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"upload-document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SFDC file docs Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"contact_id\" : \"0035j00000JF4ZMAA1\",\r\n  \"loan_id\" : \"a185g000000RadUAAS\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/upload-document",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"upload-document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/send/account-statement/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"AccountId\": \"Wvx6oXLRQJSqNVWoyNEZHD8n9mZkoAiwagDrx\",\r\n    \"Mobile\": \"1112223333\",\r\n    \"Phone_numbers\": [\r\n      \"1112223333\",\r\n      \"1112224444\",\r\n      \"1112225555\"\r\n    ],\r\n    \"balance\": {\r\n      \"available\": 100,\r\n      \"current\": 110\r\n    },\r\n    \"name\": \"Alberta Bobbeth Charleson\",\r\n    \"account_name\": \"Plaid Checking\",\r\n    \"email\": \"accountholder0@example.com\",\r\n    \"emails\": [\r\n      \"accountholder0@example.com\",\r\n      \"accountholder1@example.com\",\r\n      \"extraordinarily.long.email.username.123456@reallylonghostname.com\"\r\n    ],\r\n    \"billing_address\": \"Malakoff, US, 14236, NY, 2992 Cameron Road\",\r\n    \"addresses\": \"San Matias, US, 93405-2255, CA, 2493 Leisure Lane\",\r\n    \"Period_Covered\": \"Sep-01-2022 to Dec-01-2022\",\r\n    \"statement_date\": \"Dec-01-2022\",\r\n    \"instituion_id\": \"ins_3\",\r\n    \"institute_name\": \"Chase\",\r\n    \"transactions\": [\r\n      {\r\n        \"Date\": \"2022-12-01\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"GvMLGnyQlwSbq4ELvqW4tNQgMn11RyCn7Qdy9\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-29\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"jBWQeLJbqpIk8wB4z8o8U9WRaEaqL3SwEKDzd\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-28\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"JvpgGw4ErkSEzKqokzbqFlKG1BjW9pfNqBgBk\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-28\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"k3lZeMxyKwUw8PgN38ngcDRPVbG8lEuRKLdL1\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-27\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"1dRXe64lkJIm9EwR49W4FdxrjNnp8pu3dwlKR\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-14\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"8erBxJDp16Ioq1AKbqe7IlzDVzMX8MfrKnl94\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-01\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"EGQMzVw9y7CQ918D39nBHVodAokjlkcE9yKoa\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-30\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"Wvx6oXLRQJSqNVWoyNEZHD8aj8nXPnf4wRmpJ\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-29\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"A8P7lwxnG1TX9keND9nxS4DzPDrgXrfo68Xgq\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-29\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"GvMLGnyQlwSbq4ELvqxnIV4j647XG7cnAaebE\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-28\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"narLXRM5k4hRZaqleZ6LFB1Nv1b9XbuGKoyrz\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-15\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"4NRq3nare6skaDjRbaQ1Inlx1y93LRFn6LbAR\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-02\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"NvEke87RxqSMryZDkra9s6JzKgmxRZFnlQ658\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-30\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"PvlnykQbarSZGWvDxGw6tVDnqrGwQdtQxA6W5\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-29\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"jBWQeLJbqpIk8wB4z8mQI34LB8qbREuZNaWLW\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-29\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"77KzJRapMPibwDmkMwBKIvZLok5pKrCMExJnk\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-28\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"elpNqMPvk6UQ4ZkB84qNHjR8E6NaM3f7qm954\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-15\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"QwqbepXJ4zTZ3R8La3DBtbpWK4Enmof3NDm7d\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-02\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"ZX4lxE8q1bSWe6wdReNlhXeEN1lAGLFroGqXK\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      }\r\n    ]\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-accelerator-api.sg-s1.cloudhub.io/api/send/account-statement/472199?email=manuelg@nousinfo.com",
+					"protocol": "http",
+					"host": [
+						"plaid-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"send",
+						"account-statement",
+						"472199"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "manuelg@nousinfo.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/send/account-statement/ Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"AccountId\": \"Wvx6oXLRQJSqNVWoyNEZHD8n9mZkoAiwagDrx\",\r\n    \"Mobile\": \"1112223333\",\r\n    \"Phone_numbers\": [\r\n      \"1112223333\",\r\n      \"1112224444\",\r\n      \"1112225555\"\r\n    ],\r\n    \"balance\": {\r\n      \"available\": 100,\r\n      \"current\": 110\r\n    },\r\n    \"name\": \"Alberta Bobbeth Charleson\",\r\n    \"account_name\": \"Plaid Checking\",\r\n    \"email\": \"accountholder0@example.com\",\r\n    \"emails\": [\r\n      \"accountholder0@example.com\",\r\n      \"accountholder1@example.com\",\r\n      \"extraordinarily.long.email.username.123456@reallylonghostname.com\"\r\n    ],\r\n    \"billing_address\": \"Malakoff, US, 14236, NY, 2992 Cameron Road\",\r\n    \"addresses\": \"San Matias, US, 93405-2255, CA, 2493 Leisure Lane\",\r\n    \"Period_Covered\": \"Sep-01-2022 to Dec-01-2022\",\r\n    \"statement_date\": \"Dec-01-2022\",\r\n    \"instituion_id\": \"ins_3\",\r\n    \"institute_name\": \"Chase\",\r\n    \"transactions\": [\r\n      {\r\n        \"Date\": \"2022-12-01\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"GvMLGnyQlwSbq4ELvqW4tNQgMn11RyCn7Qdy9\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-29\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"jBWQeLJbqpIk8wB4z8o8U9WRaEaqL3SwEKDzd\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-28\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"JvpgGw4ErkSEzKqokzbqFlKG1BjW9pfNqBgBk\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-28\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"k3lZeMxyKwUw8PgN38ngcDRPVbG8lEuRKLdL1\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-27\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"1dRXe64lkJIm9EwR49W4FdxrjNnp8pu3dwlKR\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-14\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"8erBxJDp16Ioq1AKbqe7IlzDVzMX8MfrKnl94\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-11-01\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"EGQMzVw9y7CQ918D39nBHVodAokjlkcE9yKoa\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-30\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"Wvx6oXLRQJSqNVWoyNEZHD8aj8nXPnf4wRmpJ\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-29\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"A8P7lwxnG1TX9keND9nxS4DzPDrgXrfo68Xgq\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-29\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"GvMLGnyQlwSbq4ELvqxnIV4j647XG7cnAaebE\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-28\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"narLXRM5k4hRZaqleZ6LFB1Nv1b9XbuGKoyrz\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-15\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"4NRq3nare6skaDjRbaQ1Inlx1y93LRFn6LbAR\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-10-02\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"NvEke87RxqSMryZDkra9s6JzKgmxRZFnlQ658\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-30\",\r\n        \"merchant_name\": \"United Airlines\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"PvlnykQbarSZGWvDxGw6tVDnqrGwQdtQxA6W5\",\r\n        \"transaction_type\": \"special\",\r\n        \"debit\": -500,\r\n        \"credit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-29\",\r\n        \"merchant_name\": \"McDonald's\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"jBWQeLJbqpIk8wB4z8mQI34LB8qbREuZNaWLW\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 12,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-29\",\r\n        \"merchant_name\": \"Starbucks\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"77KzJRapMPibwDmkMwBKIvZLok5pKrCMExJnk\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 4.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-28\",\r\n        \"merchant_name\": null,\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"elpNqMPvk6UQ4ZkB84qNHjR8E6NaM3f7qm954\",\r\n        \"transaction_type\": \"place\",\r\n        \"credit\": 89.4,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-15\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"QwqbepXJ4zTZ3R8La3DBtbpWK4Enmof3NDm7d\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 6.33,\r\n        \"debit\": \"\"\r\n      },\r\n      {\r\n        \"Date\": \"2022-09-02\",\r\n        \"merchant_name\": \"Uber\",\r\n        \"payment_channel\": \"in store\",\r\n        \"pending\": false,\r\n        \"pending_transaction_id\": \"\",\r\n        \"transaction_id\": \"ZX4lxE8q1bSWe6wdReNlhXeEN1lAGLFroGqXK\",\r\n        \"transaction_type\": \"special\",\r\n        \"credit\": 5.4,\r\n        \"debit\": \"\"\r\n      }\r\n    ]\r\n  }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://plaid-len-accelerator-api.sg-s1.cloudhub.io/api/send/account-statement/472199?email=prakashkm@nousinfo.com",
+					"protocol": "http",
+					"host": [
+						"plaid-len-accelerator-api",
+						"sg-s1",
+						"cloudhub",
+						"io"
+					],
+					"path": [
+						"api",
+						"send",
+						"account-statement",
+						"472199"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "prakashkm@nousinfo.com"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
