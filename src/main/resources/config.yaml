@@ -9,7 +9,7 @@ plaid:
     host: "sandbox.plaid.com"
     identity: "/identity/get"
     transactions: "/transactions/get"
-    institutions: "/institutions/get_by_id"
+    institutions: "/institutions/get_by_id" 
 
 sysApi:   
   pdfGen:
