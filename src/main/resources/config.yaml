@@ -2,8 +2,8 @@ plaid:
   client_id: "62b2c28d5063bf00153693a0"
   secret: "0b9acdbc17a3aa5304237b3efbda00"
   secret1: "b6904facdc9ab3a6e0977743cf1b8a"
-  access_token: "access-sandbox-590e3bc6-ab0b-4d74-9248-fac1164e89d7"
-  access_token1: "access-sandbox-4242ba96-255b-4854-b939-b14ef1267458"
+  access_token: "access-sandbox-a84ff61b-c453-455e-9272-b85f0d51dc7c"
+  access_token1: "access-sandbox-511894d3-55e9-4a39-a8ca-1a3cf6059c7c"
 
   request:
     host: "sandbox.plaid.com"
